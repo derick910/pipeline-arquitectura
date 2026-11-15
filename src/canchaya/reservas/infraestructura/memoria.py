@@ -2,14 +2,13 @@
 from __future__ import annotations
 
 import threading
-from typing import Dict, Optional
 
 from canchaya.reservas.dominio.modelos import Reserva
 
 
 class RepositorioEnMemoria:
     def __init__(self) -> None:
-        self._reservas: Dict[str, Reserva] = {}
+        self._reservas: dict[str, Reserva] = {}
         self._lock = threading.Lock()
 
     def agregar_si_libre(self, reserva: Reserva) -> bool:
@@ -20,5 +19,5 @@ class RepositorioEnMemoria:
             self._reservas[reserva.id] = reserva
             return True
 
-    def buscar_por_id(self, id_reserva: str) -> Optional[Reserva]:
+    def buscar_por_id(self, id_reserva: str) -> Reserva| None:
         return self._reservas.get(id_reserva)

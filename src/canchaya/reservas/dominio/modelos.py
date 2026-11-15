@@ -49,7 +49,7 @@ class Reserva:
     def activa(self) -> bool:
         return self.estado != EstadoReserva.CANCELADA
 
-    def solapa_con(self, otra: "Reserva") -> bool:
+    def solapa_con(self, otra: Reserva) -> bool:
         """Dos reservas se solapan si comparten cancha y sus rangos se cruzan."""
         return (
             self.cancha_id == otra.cancha_id

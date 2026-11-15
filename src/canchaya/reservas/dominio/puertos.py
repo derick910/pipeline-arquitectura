@@ -1,7 +1,7 @@
 """Puertos del dominio: interfaces que implementa la infraestructura."""
 from __future__ import annotations
 
-from typing import Optional, Protocol
+from typing import Protocol
 
 from .modelos import Reserva
 
@@ -14,4 +14,4 @@ class ReservaRepository(Protocol):
         exclusión de PostgreSQL (ADR-04).
         """
 
-    def buscar_por_id(self, id_reserva: str) -> Optional[Reserva]: ...
+    def buscar_por_id(self, id_reserva: str) -> Reserva| None: ...
