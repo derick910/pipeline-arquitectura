@@ -1,0 +1,45 @@
+name: CI CanchaYa
+
+on:
+  push:
+    branches: [main, "feature/**"]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    name: Calidad y pruebas
+    runs-on: ubuntu-latest
+    steps:
+      - name: Obtener el código
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Instalar dependencias
+        run: pip install -e ".[dev]"
+
+      - name: Análisis estático (lint)
+        run: ruff check src tests
+
+      - name: Pruebas unitarias y de arquitectura con cobertura
+        run: pytest --cov=canchaya --cov-report=term-missing --cov-report=xml --cov-fail-under=80
+
+      - name: Publicar reporte de cobertura
+        uses: actions/upload-artifact@v4
+        with:
+          name: cobertura
+          path: coverage.xml
+
+  build:
+    name: Construcción de la imagen
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Construir imagen Docker
+        run: docker build -t canchaya:${{ github.sha }} .
